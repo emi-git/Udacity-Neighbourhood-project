@@ -13,7 +13,7 @@ function initMap() {
     service.nearbySearch({
         location: ShanghaiGovernment,
         radius: 10000,
-        keyword: "park"
+        type: ['park']
     }, placeServiceCallback);
 }
 
