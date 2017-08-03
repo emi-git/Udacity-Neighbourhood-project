@@ -2,16 +2,26 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <div id="map"></div>
+	<header id="top">
+		<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Title</span>
+	</header>
+	<nav id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="#">About</a>
+		<a href="#">Services</a>
+		<a href="#">Clients</a>
+		<a href="#">Contact</a>
+	</nav>
+	<div id="map"></div>
 
-    <script src="js/jquery-3.2.1.js"></script>
-    <script src="js/main.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5Zusczf03RjQryWwOlHxboT0FKawmB7k&libraries=places&callback=initMap"></script>
+	<script src="js/jquery-3.2.1.js"></script>
+	<script src="js/main.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5Zusczf03RjQryWwOlHxboT0FKawmB7k&libraries=places&callback=initMap"></script>
 </body>
 
 </html>
