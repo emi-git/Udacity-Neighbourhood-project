@@ -11,7 +11,7 @@
 		<span style="cursor:pointer" data-bind="click: toggleNav">&#9776;</span><span>Title</span>
 	</header>
 	<nav>
-		<input type="text" class="text-input" id="filter" value="" data-bind="keyup: getValue"/>
+		<input type="text" class="text-input" id="filter" value="" data-bind="textInput: filterStr" />
 		<span id="filter-count"></span>
 		<ul>
 			<li><a href="#">About</a></li>

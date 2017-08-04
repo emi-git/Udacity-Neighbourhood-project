@@ -109,14 +109,23 @@ function populateInfoWindow(marker, infoWindow) {
 
 var ViewModel = function () {
     var that = this;
+    this.placeList = ko.observableArray([]);
+    this.markers = [];
+    this.filterStr = ko.observable("");
+    //TODO: init placeList
+    this.filterStr.subscribe(function (value) {
+        $("nav ul li").each(function () {
+            if ($(this).text().search(new RegExp(value, "i")) < 0) {
+                $(this).fadeOut();
+            } else {
+                $(this).show();
+            }
+        });
+    });
     this.toggleNav = function () {
         $("nav").toggleClass("show");
         $("header").toggleClass("pushRight");
         $("#map").toggleClass("pushRight");
-    };
-    this.getValue = function (e) {
-        var a = e;
-        console.log("get keyup");
     };
 };
 ko.applyBindings(new ViewModel());
