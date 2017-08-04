@@ -36,7 +36,7 @@ function createMarker(place) {
         animation: google.maps.Animation.DROP
     });
     markers.push(marker);
-    google.maps.event.addListener(marker, 'click', function() {
+    google.maps.event.addListener(marker, 'click', function () {
         populateInfoWindow(marker, infowindow);
     });
 };
@@ -46,7 +46,7 @@ function populateInfoWindow(marker, infoWindow) {
         infowindow.setContent('');
         infowindow.marker = marker;
 
-        infowindow.addListener('closeclick', function() {
+        infowindow.addListener('closeclick', function () {
             infowindow.marker = null;
         });
 
@@ -65,7 +65,7 @@ function populateInfoWindow(marker, infoWindow) {
             $.ajax({
                 url: url,
                 method: "GET"
-            }).then(function(data) {
+            }).then(function (data) {
                 var venue = data.response.venues[0];
                 var id = venue.id;
                 var venueURL = "https://api.foursquare.com/v2/venues/" + id + v_param + clien_id_secret_param;
@@ -73,7 +73,7 @@ function populateInfoWindow(marker, infoWindow) {
                     url: venueURL, //"https://api.foursquare.com/v2/venues/4baf0c23f964a520a2e83be3?v=20170801&client_id=FEPJ53REVS0FJ4GRY2ERV5VK0R1G00RLLOXLEGMPXGWRDPDZ&client_secret=RZN5VG4VVG2IM4ZDWYAYG3OU33UX5T2OV2FGSGZ0TOROTDRN"
                     method: "GET"
                 });
-            }).then(function(data) {
+            }).then(function (data) {
                 var item = data.response.venue;
                 var i = 0;
                 var tip = "";
@@ -94,7 +94,7 @@ function populateInfoWindow(marker, infoWindow) {
                     photo = $(document.createElement("img")).attr('src', url);
                     $("#foursquare").append(photo);
                 }
-            }).fail(function(xhr) {
+            }).fail(function (xhr) {
                 console.log('error', xhr);
                 return null;
             });
@@ -106,14 +106,17 @@ function populateInfoWindow(marker, infoWindow) {
     }
 };
 
-function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("map").style.marginLeft = "250px";
-    document.getElementById("top").style.marginLeft = "250px";
-}
 
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("map").style.marginLeft = "0";
-    document.getElementById("top").style.marginLeft = "0";
-}
+var ViewModel = function () {
+    var that = this;
+    this.toggleNav = function () {
+        $("nav").toggleClass("show");
+        $("header").toggleClass("pushRight");
+        $("#map").toggleClass("pushRight");
+    };
+    this.getValue = function (e) {
+        var a = e;
+        console.log("get keyup");
+    };
+};
+ko.applyBindings(new ViewModel());

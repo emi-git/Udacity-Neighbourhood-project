@@ -6,19 +6,23 @@ body {
     font-family: "Lato", sans-serif;
 }
 
-#map {
-    height: 100%;
-}
-
-#top {
+header {
+  height: 40px;
   z-index: 100;
   position: relative;
   color: #fff;
   background: #333333;
   transition: margin-left .5s;
+  font-size:2em;
 }
 
-.sidenav {
+#map {
+    height: 100%;/*fallback*/
+    height: calc(100% - 40px);
+    transition: margin-left .5s;
+}
+
+nav {
     height: 100%;
     width: 0;
     position: fixed;
@@ -31,7 +35,7 @@ body {
     padding-top: 60px;
 }
 
-.sidenav a {
+nav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
@@ -40,25 +44,21 @@ body {
     transition: 0.3s;
 }
 
-.sidenav a:hover,
+nav a:hover,
 .offcanvas a:focus {
     color: #f1f1f1;
 }
 
-.sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+.show {
+    width: 250px;
 }
 
-#map {
-    transition: margin-left .5s;
-    padding: 16px;
+.pushRight {
+    margin-left: 250px;
 }
 
-@media screen and (max-height: 450px) {
+/*@media screen and (max-height: 450px) {
+
     .sidenav {
         padding-top: 15px;
     }
@@ -66,3 +66,4 @@ body {
         font-size: 18px;
     }
 }
+}*/
