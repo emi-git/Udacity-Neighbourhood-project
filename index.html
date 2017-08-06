@@ -13,11 +13,8 @@
 	<nav>
 		<input type="text" class="text-input" id="filter" value="" data-bind="textInput: filterStr" />
 		<span id="filter-count"></span>
-		<ul>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Services</a></li>
-			<li><a href="#">Clients</a></li>
-			<li><a href="#">Contact</a></li>
+		<ul data-bind="foreach: placeList">
+			<a data-bind="text: name"></a>
 		</ul>
 	</nav>
 	<div id="map"></div>
@@ -25,7 +22,7 @@
 	<script src="js/jquery-3.2.1.js"></script>
 	<script src="js/knockout-3.4.2.js"></script>
 	<script src="js/main.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5Zusczf03RjQryWwOlHxboT0FKawmB7k&libraries=places&callback=initMap"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5Zusczf03RjQryWwOlHxboT0FKawmB7k&libraries=places&callback=viewModel.initMap"></script>
 </body>
 
 </html>

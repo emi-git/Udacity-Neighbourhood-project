@@ -35,10 +35,18 @@ nav {
     padding-top: 60px;
 }
 
+nav input{
+    display: block;
+    margin: 0 auto;
+}
+
+nav ul {
+    padding: 0px;
+}
 nav a {
-    padding: 8px 8px 8px 32px;
+    padding: 4px 4px 4px 16px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 1em;
     color: #818181;
     display: block;
     transition: 0.3s;
