@@ -13,8 +13,8 @@
 	<nav>
 		<input type="text" class="text-input" id="filter" value="" data-bind="textInput: filterStr" />
 		<span id="filter-count"></span>
-		<ul data-bind="foreach: placeList">
-			<a data-bind="text: name"></a>
+		<ul data-bind="foreach: displayedPlaceList">
+			<a data-bind="text: name, click: $parent.selectPlace"></a>
 		</ul>
 	</nav>
 	<div id="map"></div>

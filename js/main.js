@@ -1,23 +1,44 @@
 function Place(placeData) {
-    this.location = placeData.geometry.location;
+    this.location = placeData.location;
     this.name = placeData.name;
+    this.id = placeData.id;
 };
 
 function ViewModel() {
     var that = this;
     this.map = null;
+    this.bounds = null;
     this.infowindow = null;
-    this.placeList = ko.observableArray([]);
+    this.places = [];
     this.markers = [];
+    this.displayedPlaceList = ko.observableArray([]);
     this.filterStr = ko.observable("");
+    //when search text change, we need hide the other list and corresponding markers
     this.filterStr.subscribe(function(value) {
-        $("nav ul a").each(function() {
-            if ($(this).text().search(new RegExp(value, "i")) < 0) {
-                $(this).fadeOut();
-            } else {
-                $(this).show();
+
+        that.displayedPlaceList.removeAll();
+        if (value !== "") {
+            that.places.forEach(function(ele, index, arr) {
+                if (ele.name.indexOf(value) >= 0) {
+                    that.displayedPlaceList.push(ele);
+                }
+            });
+        } else {
+            that.places.forEach(function(ele, index, arr) {
+                that.displayedPlaceList.push(ele);
+            });
+        }
+
+        that.hideAllMarkers();
+        if (that.displayedPlaceList() != 0) {
+            that.bounds = new google.maps.LatLngBounds();
+            var tempMarker;
+            for (var i = 0; i < that.displayedPlaceList().length; i++) {
+                tempMarker = that.showSelectedMarker(that.displayedPlaceList()[i].id);
+                that.bounds.extend(tempMarker.position);
             }
-        });
+            that.map.fitBounds(that.bounds);
+        }
     });
 
     this.toggleNav = function() {
@@ -25,10 +46,35 @@ function ViewModel() {
         $("header").toggleClass("pushRight");
         $("#map").toggleClass("pushRight");
     };
-    
-    this.selectPlace = function() {
 
+    //this function will only show the corresponding marker on the map and change map bounds
+    this.selectPlace = function(place) {
+        var currentMarker;
+        for (var i = 0; i < that.markers.length; i++) {
+            currentMarker = that.markers[i];
+            if (currentMarker.placeId === place.id) {
+                that.toggleBounce(currentMarker);
+                that.populateInfoWindow(currentMarker, that.infowindow);
+
+            }
+        }
     };
+
+    this.hideAllMarkers = function() {
+        for (var i = 0; i < this.markers.length; i++) {
+            this.markers[i].setMap(null);
+        }
+    };
+
+    this.showSelectedMarker = function(placeId) {
+        for (var i = 0; i < this.markers.length; i++) {
+            if (this.markers[i].placeId === placeId) {
+                this.markers[i].setMap(that.map);
+                return this.markers[i];
+            }
+        }
+    };
+
 
     this.initMap = function() {
         var ShanghaiGovernment = { lat: 31.230429, lng: 121.473692 };
@@ -38,20 +84,28 @@ function ViewModel() {
         });
 
         this.infowindow = new google.maps.InfoWindow();
+        this.bounds = new google.maps.LatLngBounds();
         var service = new google.maps.places.PlacesService(this.map);
         service.nearbySearch({
             location: ShanghaiGovernment,
             radius: 10000,
             type: ['park']
         }, this.placeServiceCallback);
+
     };
 
     this.placeServiceCallback = function(results, status) {
+        var tempPlace = null;
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
-                // places.push(results[i]);
-                that.placeList.push(new Place(results[i]));
-                that.createMarker(that.placeList()[i]);
+                tempPlace = new Place({
+                    location: results[i].geometry.location,
+                    name: results[i].name,
+                    id: i
+                });
+                that.places.push(tempPlace);
+                that.displayedPlaceList.push(tempPlace);
+                that.createMarker(tempPlace);
             }
         }
     };
@@ -61,20 +115,31 @@ function ViewModel() {
             map: that.map,
             position: place.location,
             title: place.name,
+            placeId: place.id,
             animation: google.maps.Animation.DROP
         });
+        this.bounds.extend(marker.position);
+        this.map.fitBounds(this.bounds);
         this.markers.push(marker);
         google.maps.event.addListener(marker, 'click', function() {
+            that.toggleBounce(marker);
             that.populateInfoWindow(marker, that.infowindow);
         });
     };
-
+    this.toggleBounce = function(marker) {
+        if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+    };
     this.populateInfoWindow = function(marker, infoWindow) {
         if (this.infowindow.marker != marker) {
             this.infowindow.setContent('');
             this.infowindow.marker = marker;
 
             this.infowindow.addListener('closeclick', function() {
+                marker.setAnimation(null);
                 that.infowindow.marker = null;
             });
 
