@@ -3,21 +3,31 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: "Lato", sans-serif;
+    font-family: verdana, sans-serif;
+}
+
+h2 {
+    font-size: 1.2em;
 }
 
 header {
-  height: 40px;
-  z-index: 100;
-  position: relative;
-  color: #fff;
-  background: #333333;
-  transition: margin-left .5s;
-  font-size:2em;
+    height: 40px;
+    z-index: 100;
+    position: relative;
+    color: #fff;
+    background: #111;
+    transition: margin-left .5s;
+    font-size: 2em;
+}
+
+header span {
+    margin: 5px;
+    cursor: pointer
 }
 
 #map {
-    height: 100%;/*fallback*/
+    height: 100%;
+    /*fallback*/
     height: calc(100% - 40px);
     transition: margin-left .5s;
 }
@@ -32,29 +42,39 @@ nav {
     background-color: #111;
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 60px;
+    color: #818181;
+    /*padding-top: 60px;*/
 }
 
-nav input{
+nav input {
     display: block;
+    width: 100%;
     margin: 0 auto;
+    padding: 10px;
+    border: solid 1px #dcdcdc;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+input:focus {
+    border: solid 1px #707070;
+    box-shadow: 0 0 5px 1px #969696;
 }
 
 nav ul {
     padding: 0px;
 }
+
 nav a {
-    padding: 4px 4px 4px 16px;
+    padding: 6px;
     text-decoration: none;
     font-size: 1em;
-    color: #818181;
     display: block;
     transition: 0.3s;
 }
 
-nav a:hover,
-.offcanvas a:focus {
+nav a:hover {
     color: #f1f1f1;
+    cursor: pointer
 }
 
 .show {
@@ -64,6 +84,7 @@ nav a:hover,
 .pushRight {
     margin-left: 250px;
 }
+
 
 /*@media screen and (max-height: 450px) {
 

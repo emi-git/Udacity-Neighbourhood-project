@@ -8,10 +8,11 @@
 
 <body>
 	<header>
-		<span style="cursor:pointer" data-bind="click: toggleNav">&#9776;</span><span>Title</span>
+		<span data-bind="click: toggleNav">&#9776;
 	</header>
 	<nav>
-		<input type="text" class="text-input" id="filter" value="" data-bind="textInput: filterStr" />
+		<h2>Shanghai Parks</h2>
+		<input type="text" placeholder="filter locations" class="text-input" id="filter" value="" data-bind="textInput: filterStr" />
 		<span id="filter-count"></span>
 		<ul data-bind="foreach: displayedPlaceList">
 			<a data-bind="text: name, click: $parent.selectPlace"></a>
