@@ -7,10 +7,10 @@
 </head>
 
 <body>
-	<header>
+	<header class="pushRight">
 		<span data-bind="click: toggleNav">&#9776;
 	</header>
-	<nav>
+	<nav class="show">
 		<h2>Shanghai Parks</h2>
 		<input type="text" placeholder="filter locations" class="text-input" id="filter" value="" data-bind="textInput: filterStr" />
 		<span id="filter-count"></span>
@@ -18,7 +18,7 @@
 			<a data-bind="text: name, click: $parent.selectPlace"></a>
 		</ul>
 	</nav>
-	<div id="map"></div>
+	<div id="map" class="pushRight"></div>
 
 	<script src="js/jquery-3.2.1.js"></script>
 	<script src="js/knockout-3.4.2.js"></script>

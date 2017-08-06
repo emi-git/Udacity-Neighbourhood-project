@@ -142,7 +142,7 @@ function ViewModel() {
                 marker.setAnimation(null);
                 that.infowindow.marker = null;
             });
-
+            // use Foursquare API to get mode Venue Data
             function getVenueData(lan_lng) {
                 var url = "https://api.foursquare.com/v2/venues/search";
                 var v_param = "?v=20170801";
@@ -163,7 +163,7 @@ function ViewModel() {
                     var id = venue.id;
                     var venueURL = "https://api.foursquare.com/v2/venues/" + id + v_param + clien_id_secret_param;
                     return $.ajax({
-                        url: venueURL, //"https://api.foursquare.com/v2/venues/4baf0c23f964a520a2e83be3?v=20170801&client_id=FEPJ53REVS0FJ4GRY2ERV5VK0R1G00RLLOXLEGMPXGWRDPDZ&client_secret=RZN5VG4VVG2IM4ZDWYAYG3OU33UX5T2OV2FGSGZ0TOROTDRN"
+                        url: venueURL, 
                         method: "GET"
                     });
                 }).then(function(data) {
@@ -171,7 +171,6 @@ function ViewModel() {
                     var i = 0;
                     var tip = "";
                     var photo = "";
-                    var address = ""; //TODO
                     venueData.name = item.name;
                     if (item.tips.groups[0].items) {
                         venueData.topTips = item.tips.groups[0].items;
