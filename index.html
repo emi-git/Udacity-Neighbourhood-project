@@ -7,19 +7,21 @@
 </head>
 
 <body>
-	<header class="pushRight">
-		<span data-bind="click: toggleNav">&#9776;
-	</header>
-	<nav class="show">
+	<nav>
 		<h2>Shanghai Parks</h2>
-		<input type="text" placeholder="filter locations" class="text-input" id="filter" value="" data-bind="textInput: filterStr" />
+		<input type="text" placeholder="filter locations" class="text-input" id="filter" value="" data-bind="textInput: filterStr"
+		/>
 		<span id="filter-count"></span>
 		<ul data-bind="foreach: displayedPlaceList">
 			<a data-bind="text: name, click: $parent.selectPlace"></a>
 		</ul>
 	</nav>
-	<div id="map" class="pushRight"></div>
-
+	<main data-bind="click: closeNav">
+		<header>
+			<span data-bind="click: toggleNav">&#9776;</span>
+		</header>
+		<div id="map"></div>
+	</main>
 	<script src="js/jquery-3.2.1.js"></script>
 	<script src="js/knockout-3.4.2.js"></script>
 	<script src="js/main.js"></script>

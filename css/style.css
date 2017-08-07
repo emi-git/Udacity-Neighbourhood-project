@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
     font-family: verdana, sans-serif;
@@ -10,10 +11,17 @@ h2 {
     font-size: 1.2em;
 }
 
+main {
+    height: 100%;
+    width: 100%;
+    transition: margin-left .5s;
+    box-sizing: border-box;
+}
+
 header {
     height: 40px;
-    z-index: 100;
-    position: relative;
+    /*z-index: 100;*/
+    /*position: relative;*/
     color: #fff;
     background: #111;
     transition: margin-left .5s;
@@ -32,18 +40,32 @@ header span {
     transition: margin-left .5s;
 }
 
+/* Since we're mobile-first, by default, the drawer is hidden. */
 nav {
     height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
+    width: 250px;
+    position: absolute;
+    /*z-index: 1;*/
+    /*top: 0;
+    left: 0;*/
     background-color: #111;
     overflow-x: hidden;
-    transition: 0.5s;
+    /* This trasform moves the drawer off canvas. */
+    transform: translate(-250px, 0);
+    transition:transform 0.5s ease;
     color: #818181;
-    /*padding-top: 60px;*/
+    box-sizing: border-box
+}
+
+nav.open {
+    z-index: 1;
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+}
+
+input:focus {
+    border: solid 1px #707070;
+    box-shadow: 0 0 5px 1px #969696;
 }
 
 nav input {
@@ -53,11 +75,7 @@ nav input {
     padding: 10px;
     border: solid 1px #dcdcdc;
     transition: box-shadow 0.3s, border 0.3s;
-}
-
-input:focus {
-    border: solid 1px #707070;
-    box-shadow: 0 0 5px 1px #969696;
+    box-sizing: border-box;
 }
 
 nav ul {
@@ -77,21 +95,31 @@ nav a:hover {
     cursor: pointer
 }
 
-.show {
+/*.show {
     width: 250px;
 }
 
 .pushRight {
     margin-left: 250px;
 }
+*/
 
-
-/*@media screen and (max-height: 450px) {
-
-    .sidenav {
-        padding-top: 15px;
+/* small screens */
+ /* If there is enough space (> 600px), we keep the drawer open all the time. */
+@media screen and (min-width: 701px) {
+    /* We open the drawer. */
+    nav {
+        position:relative;
+        transform: translate(0, 0);
     }
-    .sidenav a {
-        font-size: 18px;
+    body {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-flow: row nowrap;
+        flex-flow: row nowrap;
     }
-}*/
+    main {
+         width: auto;
+         flex-grow: 1;
+    }
+}

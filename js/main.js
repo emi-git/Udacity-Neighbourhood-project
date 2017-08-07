@@ -14,17 +14,17 @@ function ViewModel() {
     this.displayedPlaceList = ko.observableArray([]);
     this.filterStr = ko.observable("");
     //when search text change, we need hide the other list and corresponding markers
-    this.filterStr.subscribe(function(value) {
+    this.filterStr.subscribe(function (value) {
 
         that.displayedPlaceList.removeAll();
         if (value !== "") {
-            that.places.forEach(function(ele, index, arr) {
+            that.places.forEach(function (ele, index, arr) {
                 if (ele.name.indexOf(value) >= 0) {
                     that.displayedPlaceList.push(ele);
                 }
             });
         } else {
-            that.places.forEach(function(ele, index, arr) {
+            that.places.forEach(function (ele, index, arr) {
                 that.displayedPlaceList.push(ele);
             });
         }
@@ -41,14 +41,15 @@ function ViewModel() {
         }
     });
 
-    this.toggleNav = function() {
-        $("nav").toggleClass("show");
-        $("header").toggleClass("pushRight");
-        $("#map").toggleClass("pushRight");
+    this.toggleNav = function (vm,e) {
+        $("nav").toggleClass("open");
+        e.stopPropagation();
     };
-
+    this.closeNav = function() {
+        $("nav").removeClass("open");
+    };
     //this function will only show the corresponding marker on the map and change map bounds
-    this.selectPlace = function(place) {
+    this.selectPlace = function (place) {
         var currentMarker;
         for (var i = 0; i < that.markers.length; i++) {
             currentMarker = that.markers[i];
@@ -60,13 +61,13 @@ function ViewModel() {
         }
     };
 
-    this.hideAllMarkers = function() {
+    this.hideAllMarkers = function () {
         for (var i = 0; i < this.markers.length; i++) {
             this.markers[i].setMap(null);
         }
     };
 
-    this.showSelectedMarker = function(placeId) {
+    this.showSelectedMarker = function (placeId) {
         for (var i = 0; i < this.markers.length; i++) {
             if (this.markers[i].placeId === placeId) {
                 this.markers[i].setMap(that.map);
@@ -76,7 +77,7 @@ function ViewModel() {
     };
 
 
-    this.initMap = function() {
+    this.initMap = function () {
         var ShanghaiGovernment = { lat: 31.230429, lng: 121.473692 };
         this.map = new google.maps.Map(document.getElementById("map"), {
             zoom: 13,
@@ -92,9 +93,19 @@ function ViewModel() {
             type: ['park']
         }, this.placeServiceCallback);
 
+        //make google map responsive
+        var resizeTimeout;
+        google.maps.event.addDomListener(window, "resize", function () {
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
+            resizeTimeout = setTimeout(function () {
+                that.map.setCenter(ShanghaiGovernment);
+            }, 250);
+        });
     };
 
-    this.placeServiceCallback = function(results, status) {
+    this.placeServiceCallback = function (results, status) {
         var tempPlace = null;
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
@@ -110,7 +121,7 @@ function ViewModel() {
         }
     };
 
-    this.createMarker = function(place) {
+    this.createMarker = function (place) {
         var marker = new google.maps.Marker({
             map: that.map,
             position: place.location,
@@ -121,24 +132,24 @@ function ViewModel() {
         this.bounds.extend(marker.position);
         this.map.fitBounds(this.bounds);
         this.markers.push(marker);
-        google.maps.event.addListener(marker, 'click', function() {
+        google.maps.event.addListener(marker, 'click', function () {
             that.toggleBounce(marker);
             that.populateInfoWindow(marker, that.infowindow);
         });
     };
-    this.toggleBounce = function(marker) {
+    this.toggleBounce = function (marker) {
         if (marker.getAnimation() !== null) {
             marker.setAnimation(null);
         } else {
             marker.setAnimation(google.maps.Animation.BOUNCE);
         }
     };
-    this.populateInfoWindow = function(marker, infoWindow) {
+    this.populateInfoWindow = function (marker, infoWindow) {
         if (this.infowindow.marker != marker) {
             this.infowindow.setContent('');
             this.infowindow.marker = marker;
 
-            this.infowindow.addListener('closeclick', function() {
+            this.infowindow.addListener('closeclick', function () {
                 marker.setAnimation(null);
                 that.infowindow.marker = null;
             });
@@ -158,15 +169,15 @@ function ViewModel() {
                 $.ajax({
                     url: url,
                     method: "GET"
-                }).then(function(data) {
+                }).then(function (data) {
                     var venue = data.response.venues[0];
                     var id = venue.id;
                     var venueURL = "https://api.foursquare.com/v2/venues/" + id + v_param + clien_id_secret_param;
                     return $.ajax({
-                        url: venueURL, 
+                        url: venueURL,
                         method: "GET"
                     });
-                }).then(function(data) {
+                }).then(function (data) {
                     var item = data.response.venue;
                     var i = 0;
                     var tip = "";
@@ -186,7 +197,7 @@ function ViewModel() {
                         photo = $(document.createElement("img")).attr('src', url);
                         $("#foursquare").append(photo);
                     }
-                }).fail(function(xhr) {
+                }).fail(function (xhr) {
                     console.log('error', xhr);
                     return null;
                 });
