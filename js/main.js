@@ -2,7 +2,7 @@ function Place(placeData) {
     this.location = placeData.location;
     this.name = placeData.name;
     this.id = placeData.id;
-};
+}
 
 function ViewModel() {
     var that = this;
@@ -30,7 +30,7 @@ function ViewModel() {
         }
 
         that.hideAllMarkers();
-        if (that.displayedPlaceList() != 0) {
+        if (that.displayedPlaceList() !== 0) {
             that.bounds = new google.maps.LatLngBounds();
             var tempMarker;
             for (var i = 0; i < that.displayedPlaceList().length; i++) {
@@ -171,7 +171,7 @@ function ViewModel() {
                 that.infowindow.marker = null;
             });
             // use Foursquare API to get mode Venue Data
-            function getVenueData(lan_lng) {
+            var getVenueData = function(lan_lng) {
                 var url = "https://api.foursquare.com/v2/venues/search";
                 var baseVenueURL = "https://api.foursquare.com/v2/venues/";
                 var v_param = "?v=20170801";
@@ -180,7 +180,7 @@ function ViewModel() {
                 var client_secret = "RZN5VG4VVG2IM4ZDWYAYG3OU33UX5T2OV2FGSGZ0TOROTDRN";
                 var clien_id_secret_param = "&client_id=" + client_id + "&client_secret=" + client_secret;
                 var venueData = {};
-                
+
                 that.infowindow.setContent('<h3>' + marker.title + '</h3><div id="foursquare"></div>');
                 url = url + v_param + "&ll=" + ll + clien_id_secret_param;
                 url = encodeURI(url);
@@ -234,6 +234,6 @@ function ViewModel() {
     this.googleMapError = function (ele, event) {
         alert(event.type.toUpperCase() + ": Can not load Google Map!");
     };
-};
+}
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
