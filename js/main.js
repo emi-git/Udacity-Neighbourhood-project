@@ -13,9 +13,9 @@ function ViewModel() {
     this.markers = [];
     this.displayedPlaceList = ko.observableArray([]);
     this.filterStr = ko.observable("");
-    //when search text change, we need hide the other list and corresponding markers
-    this.filterStr.subscribe(function (value) {
 
+    //when search text change, hide the other list item and corresponding markers
+    this.filterStr.subscribe(function (value) {
         that.displayedPlaceList.removeAll();
         if (value !== "") {
             that.places.forEach(function (ele, index, arr) {
@@ -41,14 +41,19 @@ function ViewModel() {
         }
     });
 
-    this.toggleNav = function (vm,e) {
+    //toggle open class when clicking the breadcrumb
+    this.toggleNav = function (vm, e) {
         $("nav").toggleClass("open");
         e.stopPropagation();
     };
-    this.closeNav = function() {
+
+    //remove open class when clicking other spaces in the main part
+    this.closeNav = function () {
         $("nav").removeClass("open");
     };
-    //this function will only show the corresponding marker on the map and change map bounds
+
+    //click handler of list item
+    //this function will only show the selected marker on the map and populate info window
     this.selectPlace = function (place) {
         var currentMarker;
         for (var i = 0; i < that.markers.length; i++) {
@@ -56,17 +61,18 @@ function ViewModel() {
             if (currentMarker.placeId === place.id) {
                 that.toggleBounce(currentMarker);
                 that.populateInfoWindow(currentMarker, that.infowindow);
-
             }
         }
     };
 
+    // hide all markers on the map
     this.hideAllMarkers = function () {
         for (var i = 0; i < this.markers.length; i++) {
             this.markers[i].setMap(null);
         }
     };
 
+    // show selected marker based on placeId
     this.showSelectedMarker = function (placeId) {
         for (var i = 0; i < this.markers.length; i++) {
             if (this.markers[i].placeId === placeId) {
@@ -76,7 +82,7 @@ function ViewModel() {
         }
     };
 
-
+    // initially load google map
     this.initMap = function () {
         var ShanghaiGovernment = { lat: 31.230429, lng: 121.473692 };
         this.map = new google.maps.Map(document.getElementById("map"), {
@@ -86,6 +92,7 @@ function ViewModel() {
 
         this.infowindow = new google.maps.InfoWindow();
         this.bounds = new google.maps.LatLngBounds();
+        // call PlaceService to get place data
         var service = new google.maps.places.PlacesService(this.map);
         service.nearbySearch({
             location: ShanghaiGovernment,
@@ -105,6 +112,8 @@ function ViewModel() {
         });
     };
 
+    // callback function of PlacesService.nearbySearch
+    // save data to the model
     this.placeServiceCallback = function (results, status) {
         var tempPlace = null;
         if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -118,9 +127,12 @@ function ViewModel() {
                 that.displayedPlaceList.push(tempPlace);
                 that.createMarker(tempPlace);
             }
+        } else {
+            console.error(status + ": Fail to call PlaceService!");
         }
     };
 
+    // initially place the marker on the map
     this.createMarker = function (place) {
         var marker = new google.maps.Marker({
             map: that.map,
@@ -137,6 +149,8 @@ function ViewModel() {
             that.populateInfoWindow(marker, that.infowindow);
         });
     };
+
+    //toggle Marker animation: Bounce
     this.toggleBounce = function (marker) {
         if (marker.getAnimation() !== null) {
             marker.setAnimation(null);
@@ -144,6 +158,9 @@ function ViewModel() {
             marker.setAnimation(google.maps.Animation.BOUNCE);
         }
     };
+
+    // populate infowindow on marker
+    // call third party api (foursquare) to show additional info on the infowindow
     this.populateInfoWindow = function (marker, infoWindow) {
         if (this.infowindow.marker != marker) {
             this.infowindow.setContent('');
@@ -156,13 +173,14 @@ function ViewModel() {
             // use Foursquare API to get mode Venue Data
             function getVenueData(lan_lng) {
                 var url = "https://api.foursquare.com/v2/venues/search";
+                var baseVenueURL = "https://api.foursquare.com/v2/venues/";
                 var v_param = "?v=20170801";
                 var ll = lan_lng ? lan_lng : "31.230429,121.473692";
                 var client_id = "FEPJ53REVS0FJ4GRY2ERV5VK0R1G00RLLOXLEGMPXGWRDPDZ";
                 var client_secret = "RZN5VG4VVG2IM4ZDWYAYG3OU33UX5T2OV2FGSGZ0TOROTDRN";
                 var clien_id_secret_param = "&client_id=" + client_id + "&client_secret=" + client_secret;
                 var venueData = {};
-
+                
                 that.infowindow.setContent('<h3>' + marker.title + '</h3><div id="foursquare"></div>');
                 url = url + v_param + "&ll=" + ll + clien_id_secret_param;
                 url = encodeURI(url);
@@ -172,7 +190,8 @@ function ViewModel() {
                 }).then(function (data) {
                     var venue = data.response.venues[0];
                     var id = venue.id;
-                    var venueURL = "https://api.foursquare.com/v2/venues/" + id + v_param + clien_id_secret_param;
+                    var venueURL = baseVenueURL + id + v_param + clien_id_secret_param;
+                    venueURL = encodeURI(venueURL);
                     return $.ajax({
                         url: venueURL,
                         method: "GET"
@@ -182,8 +201,9 @@ function ViewModel() {
                     var i = 0;
                     var tip = "";
                     var photo = "";
+                    var photoSize = "200x150";
                     venueData.name = item.name;
-                    if (item.tips.groups[0].items) {
+                    if (item.tips.groups[0].items.length > 0) {
                         venueData.topTips = item.tips.groups[0].items;
                         $("#foursquare").append($(document.createElement("h4")).text("Tips from Foursquare:"));
                         for (i = 0; i < venueData.topTips.length; i++) {
@@ -193,12 +213,13 @@ function ViewModel() {
                     }
                     if (item.bestPhoto) {
                         venueData.photos = item.bestPhoto;
-                        var url = venueData.photos.prefix + "200x150" + venueData.photos.suffix;
-                        photo = $(document.createElement("img")).attr('src', url);
+                        var url = venueData.photos.prefix + photoSize + venueData.photos.suffix;
+                        photo = $(document.createElement("img")).attr('src', encodeURI(url));
                         $("#foursquare").append(photo);
                     }
-                }).fail(function (xhr) {
-                    console.log('error', xhr);
+                }).fail(function (xhr, status) {
+                    console.log('ERROR: ' + status);
+                    console.log(xhr);
                     return null;
                 });
             };
@@ -207,6 +228,11 @@ function ViewModel() {
             getVenueData(ll);
             this.infowindow.open(this.map, marker);
         }
+    };
+
+    //error handler for loading google map api
+    this.googleMapError = function (ele, event) {
+        alert(event.type.toUpperCase() + ": Can not load Google Map!");
     };
 };
 var viewModel = new ViewModel();
