@@ -171,6 +171,7 @@ function ViewModel() {
                 that.infowindow.marker = null;
             });
             // use Foursquare API to get mode Venue Data
+            // TODO: return the Venue data and set infoWindowContent in another function
             var getVenueData = function (lan_lng) {
                 var url = "https://api.foursquare.com/v2/venues/search";
                 var baseVenueURL = "https://api.foursquare.com/v2/venues/";
@@ -181,7 +182,7 @@ function ViewModel() {
                 var clien_id_secret_param = "&client_id=" + client_id + "&client_secret=" + client_secret;
                 var venueData = {};
 
-                that.infowindow.setContent('<h3>' + marker.title + '</h3><div id="foursquare"></div>');
+                that.infowindow.setContent('<h3>' + marker.title + '</h3>');
                 url = url + v_param + "&ll=" + ll + clien_id_secret_param;
                 url = encodeURI(url);
                 $.ajax({
@@ -203,20 +204,27 @@ function ViewModel() {
                     var photo = "";
                     var photoSize = "200x150";
                     venueData.name = item.name;
-                    if (item.tips.groups[0].items.length > 0) {
-                        venueData.topTips = item.tips.groups[0].items;
-                        $("#foursquare").append($(document.createElement("h4")).text("Tips from Foursquare:"));
+                    var tempHTML = "";
+                    var tips = item.tips.groups[0].items;
+                    if (tips.length > 0) {
+                        venueData.topTips = tips;
+                        tempHTML += '<h4>Tips from Foursquare:</h4>';
+                        // $("#foursquare").append($(document.createElement("h4")).text("Tips from Foursquare:"));
                         for (i = 0; i < venueData.topTips.length; i++) {
-                            tip = $(document.createElement("p")).text(venueData.topTips[i].text);
-                            $("#foursquare").append(tip);
+                            tempHTML += '<p>' + venueData.topTips[i].text + '</p>';
+                            // tip = $(document.createElement("p")).text(venueData.topTips[i].text);
+                            // $("#foursquare").append(tip);
                         }
                     }
                     if (item.bestPhoto) {
                         venueData.photos = item.bestPhoto;
                         var url = venueData.photos.prefix + photoSize + venueData.photos.suffix;
-                        photo = $(document.createElement("img")).attr('src', encodeURI(url));
-                        $("#foursquare").append(photo);
+                        tempHTML += '<img src=' + encodeURI(url) + '>'
+                        // photo = $(document.createElement("img")).attr('src', encodeURI(url));
+                        // $("#foursquare").append(photo);
                     }
+                    tempHTML = '<div>' + tempHTML + '</div>';
+                    that.infowindow.setContent(that.infowindow.getContent() + tempHTML);
                 }).fail(function (xhr, status) {
                     console.log(status + ':' + xhr);
                     alert(status + ':' + xhr);
