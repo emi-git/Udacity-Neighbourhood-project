@@ -129,6 +129,7 @@ function ViewModel() {
             }
         } else {
             console.error(status + ": Fail to call PlaceService!");
+            alert(status + ": Fail to call PlaceService!");
         }
     };
 
@@ -171,7 +172,7 @@ function ViewModel() {
                 that.infowindow.marker = null;
             });
             // use Foursquare API to get mode Venue Data
-            var getVenueData = function(lan_lng) {
+            var getVenueData = function (lan_lng) {
                 var url = "https://api.foursquare.com/v2/venues/search";
                 var baseVenueURL = "https://api.foursquare.com/v2/venues/";
                 var v_param = "?v=20170801";
@@ -218,8 +219,8 @@ function ViewModel() {
                         $("#foursquare").append(photo);
                     }
                 }).fail(function (xhr, status) {
-                    console.log('ERROR: ' + status);
-                    console.log(xhr);
+                    console.log(status + ':' + xhr);
+                    alert(status + ':' + xhr);
                     return null;
                 });
             };

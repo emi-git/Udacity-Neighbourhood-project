@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/style.css">
 </head>
@@ -22,7 +23,7 @@
 		</header>
 		<div id="map"></div>
 	</main>
-	<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDpEsTHaCisKF2fL30-8WS2-5Xu_brucA&libraries=places&callback=viewModel.initMap" onerror="viewModel.googleMapError(this,event)"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDpEsTHaCisKF2fL30-8WS2-5Xu_brucA&libraries=places&callback=viewModel.initMap" onerror="viewModel.googleMapError(this,event)"></script>
 	<script src="js/jquery-3.2.1.js"></script>
 	<script src="js/knockout-3.4.2.js"></script>
 	<script src="js/main.js"></script>
