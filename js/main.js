@@ -59,7 +59,7 @@ function ViewModel() {
         for (var i = 0; i < that.markers.length; i++) {
             currentMarker = that.markers[i];
             if (currentMarker.placeId === place.id) {
-                that.toggleBounce(currentMarker);
+                that.animateMarker(currentMarker);
                 that.populateInfoWindow(currentMarker, that.infowindow);
             }
         }
@@ -146,18 +146,18 @@ function ViewModel() {
         this.map.fitBounds(this.bounds);
         this.markers.push(marker);
         google.maps.event.addListener(marker, 'click', function () {
-            that.toggleBounce(marker);
+            that.animateMarker(marker);
             that.populateInfoWindow(marker, that.infowindow);
         });
     };
 
-    //toggle Marker animation: Bounce
-    this.toggleBounce = function (marker) {
-        if (marker.getAnimation() !== null) {
-            marker.setAnimation(null);
-        } else {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
+    // Marker animation: Bounce
+    this.animateMarker = function (marker) {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function () {
+            marker.setAnimation(null)
+        }, 2000);
+
     };
 
     // populate infowindow on marker
@@ -168,7 +168,6 @@ function ViewModel() {
             this.infowindow.marker = marker;
 
             this.infowindow.addListener('closeclick', function () {
-                marker.setAnimation(null);
                 that.infowindow.marker = null;
             });
             // use Foursquare API to get mode Venue Data
