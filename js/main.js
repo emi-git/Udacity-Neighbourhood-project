@@ -155,7 +155,7 @@ function ViewModel() {
     this.animateMarker = function (marker) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function () {
-            marker.setAnimation(null)
+            marker.setAnimation(null);
         }, 2000);
 
     };
@@ -219,7 +219,7 @@ function ViewModel() {
                     if (item.bestPhoto) {
                         venueData.photos = item.bestPhoto;
                         var url = venueData.photos.prefix + photoSize + venueData.photos.suffix;
-                        tempHTML += '<img src=' + encodeURI(url) + '>'
+                        tempHTML += '<img src=' + encodeURI(url) + '>';
                         // photo = $(document.createElement("img")).attr('src', encodeURI(url));
                         // $("#foursquare").append(photo);
                     }
