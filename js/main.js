@@ -156,7 +156,7 @@ function ViewModel() {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function () {
             marker.setAnimation(null);
-        }, 2000);
+        }, 1400);
 
     };
 
@@ -209,19 +209,14 @@ function ViewModel() {
                     if (tips.length > 0) {
                         venueData.topTips = tips;
                         tempHTML += '<h4>Tips from Foursquare:</h4>';
-                        // $("#foursquare").append($(document.createElement("h4")).text("Tips from Foursquare:"));
                         for (i = 0; i < venueData.topTips.length; i++) {
                             tempHTML += '<p>' + venueData.topTips[i].text + '</p>';
-                            // tip = $(document.createElement("p")).text(venueData.topTips[i].text);
-                            // $("#foursquare").append(tip);
                         }
                     }
                     if (item.bestPhoto) {
                         venueData.photos = item.bestPhoto;
                         var url = venueData.photos.prefix + photoSize + venueData.photos.suffix;
                         tempHTML += '<img src=' + encodeURI(url) + '>';
-                        // photo = $(document.createElement("img")).attr('src', encodeURI(url));
-                        // $("#foursquare").append(photo);
                     }
                     tempHTML = '<div>' + tempHTML + '</div>';
                     that.infowindow.setContent(that.infowindow.getContent() + tempHTML);
