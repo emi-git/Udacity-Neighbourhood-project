@@ -69,6 +69,7 @@ nav.open {
 main.pushright {
     -webkit-transform: translate(250px, 0);
     transform: translate(250, 0);
+    width: calc(100% - 250px);
 }
 
 input:focus {
