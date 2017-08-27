@@ -16,6 +16,7 @@ main {
     width: 100%;
     transition: margin-left .5s;
     box-sizing: border-box;
+    transition: transform 0.5s ease;
 }
 
 header {
@@ -40,7 +41,9 @@ header span {
     transition: margin-left .5s;
 }
 
+
 /* Since we're mobile-first, by default, the drawer is hidden. */
+
 nav {
     height: 100%;
     width: 250px;
@@ -52,7 +55,7 @@ nav {
     overflow-x: hidden;
     /* This trasform moves the drawer off canvas. */
     transform: translate(-250px, 0);
-    transition:transform 0.5s ease;
+    transition: transform 0.5s ease;
     color: #818181;
     box-sizing: border-box
 }
@@ -61,6 +64,11 @@ nav.open {
     z-index: 1;
     -webkit-transform: translate(0, 0);
     transform: translate(0, 0);
+}
+
+main.pushright {
+    -webkit-transform: translate(250px, 0);
+    transform: translate(250, 0);
 }
 
 input:focus {
@@ -93,33 +101,4 @@ nav a {
 nav a:hover {
     color: #f1f1f1;
     cursor: pointer
-}
-
-/*.show {
-    width: 250px;
-}
-
-.pushRight {
-    margin-left: 250px;
-}
-*/
-
-/* small screens */
- /* If there is enough space (> 600px), we keep the drawer open all the time. */
-@media screen and (min-width: 701px) {
-    /* We open the drawer. */
-    nav {
-        position:relative;
-        transform: translate(0, 0);
-    }
-    body {
-        display: -webkit-flex;
-        display: flex;
-        -webkit-flex-flow: row nowrap;
-        flex-flow: row nowrap;
-    }
-    main {
-         width: auto;
-         flex-grow: 1;
-    }
 }

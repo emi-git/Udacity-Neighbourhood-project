@@ -9,7 +9,7 @@
 </head>
 
 <body>
-	<nav>
+	<nav data-bind="css:{'open':navopen }">
 		<h2>Shanghai Parks</h2>
 		<input type="text" placeholder="filter locations" class="text-input" id="filter" value="" data-bind="textInput: filterStr"
 		/>
@@ -18,9 +18,9 @@
 			<a data-bind="text: name, click: $parent.selectPlace"></a>
 		</ul>
 	</nav>
-	<main data-bind="click: closeNav">
+	<main data-bind="click: closeNavbar,css:{'pushright': navopen}">
 		<header>
-			<span data-bind="click: toggleNav">&#9776;</span>
+			<span data-bind="click: clickBreadcrumb">&#9776;</span>
 		</header>
 		<div id="map"></div>
 	</main>
